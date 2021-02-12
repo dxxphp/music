@@ -1,0 +1,535 @@
+{load href="__STATIC__/lib/bootstrap-3/css/bootstrap.css" /}
+
+{load href="__STATIC__/lib/bootstrap-3/js/bootstrap.js" /}
+
+
+
+<link rel="stylesheet" href="/static/music/css/reset.css">
+
+<link rel="stylesheet" href="/static/music/css/style.css" media="screen" type="text/css" />
+
+<div class="mobile-sticky-body-overlay"></div>
+
+<div class="wrapper">
+    <style>
+        .table-bg{border-collapse:collapse !important;}
+        .table-bg th{border-bottom-width: 0px !important;}
+        #pageBar {
+            float: left;
+            text-align: right;
+            padding: 0 20px 20px 0;
+        }
+
+        .pageBtn a {
+            min-width: 34px;
+            height: 35px;
+            border: 1px solid #dce0e0!important;
+            text-align: center;
+            /*margin-left:-5px;*/
+            cursor: pointer;
+            line-height: 33px;
+            color: #666666;
+            font-size: 13px;
+            display: inline-block;
+        }
+        .pageBtn-selected a {
+            background-color: #428bca;
+            border-color: #428bca;
+            color: #FFFFFF;
+            min-width: 34px;
+            height: 35px;
+            border: 1px solid #428bca!important;
+            text-align: center;
+            /*margin-left: -5px;*/
+            cursor: pointer;
+            line-height: 33px;
+            font-size: 13px;
+            display: inline-block;
+        }
+        .pageBtn a:hover {
+            background: #ddd;
+            /*color: white;*/
+            text-decoration: none;
+        }
+        .pageBtn-selected a:hover {
+            /*background: #ddd;*/
+            /*color: white;*/
+            text-decoration: none;
+        }
+    </style>
+    <style type="text/css">
+        a:link{color:#fff;}
+        a:visited{color:#fff;}
+        a:hover{color:#fff;}
+        a:active{color:#fff;}
+    </style>
+    <style>
+        .right-item .content[data-v-5ecb8b3b] {
+            background: #fff;
+            box-shadow: 0 0 .1rem rgba(0,0,0,.05);
+            border-radius: .1rem;
+        }
+        .keyword-wrapper[data-v-7c8bd31e] {
+            display: flex;
+            flex-wrap: wrap;
+            padding-top: .12rem;
+            justify-content: space-between;
+        }
+
+        .pages{float: right;}
+        .pages a,.pages span {
+            display:inline-block;
+            padding:20px 20px;
+            border:1px solid #f0f0f0;
+            -webkit-border-radius:3px;
+            -moz-border-radius:3px;
+            border-radius:30px;
+            font-size: 20px;
+        }
+        .pages a,.pages li {
+
+            display:inline-block;
+            list-style: none;
+            text-decoration:none; color:#58A0D3;
+        }
+        .pages a.first,.pages a.prev,.pages a.next,.pages a.end{
+            margin:0 auto;
+        }
+        .pages a:hover{
+            border-color:#50A8E6;
+        }
+        .pages span.current{
+            background:#50A8E6;
+            color:#FFF;
+            font-weight:700;
+            border-color:#50A8E6;
+        }
+
+    </style>
+    <!--
+====================================
+——— LEFT SIDEBAR WITH FOOTER
+=====================================
+-->
+
+    <div class="page-wrapper" style="color:#fff" >
+        <!-- Header -->
+
+        <div class="content-wrapper">
+            <div class="content">
+                <br><br>
+
+                <div style="padding-left: 80px;">
+
+                    <label><input type="radio" class="fores" name="sex" value="1"  {if $fors =='1'} checked="checked" {/if} >列表播放</label>
+                    <label><input type="radio" class="fores" name="sex" value="2" {if $fors =='2'} checked="checked" {/if}>单曲播放</label>
+                    <label><input type="radio" class="fores" name="sex" value="3" {if $fors =='3'} checked="checked" {/if}>随机播放</label>
+
+                    <label><input type="radio" class="syns" name="syns" value="1" {if $syns =='1'} checked="checked" {/if}>关闭音乐同步</label>
+                    <label><input type="radio" class="syns" name="syns" value="2" {if $syns =='2'} checked="checked" {/if}>开启音乐同步</label>
+
+
+                </div> <br><br><br>
+
+
+                <div class="rightShop" style="width: 700px; height: 400px; float: left;padding-left: 80px;">
+
+                    <span>全部歌曲</span>
+                    <div class="list">
+                        <table class="table card-table " style="width:100%" >
+                            <thead>
+                            <tr style="color: #fff;">
+                                <th>歌手</th>
+                                <th>歌曲</th>
+
+                            </tr>
+                            </thead>
+                            <tbody id="tbody_list">
+
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="pageBar"><!--这里添加分页按钮栏--></div>
+                </div>
+
+
+                <div  id="bodys" >
+                    <br>
+                    <div class="content" data-v-5ecb8b3b="" style="padding-left: 1000px;padding-right: 100px;">
+
+                        <span>&nbsp&nbsp&nbsp热门歌手</span>
+                        <br/>
+                        <table>
+
+                            <tbody class="body">
+                            {foreach name="musicShou" item="value" key="k"}
+
+                            <tr style="color: #fff;">
+                                {if $k%10 === 0} <br><br>&nbsp {/if}
+                                &nbsp<a style="color: #fff;text-decoration:none;" href="?title={$value.title}">
+
+                                {if $title == $value.title} <span style="color: #2c3b41">{$value.title}</span> {else/} {$value.title} {/if}
+
+                            </a>&nbsp&nbsp
+
+                            </tr>
+                            {/foreach}
+                            </tbody>
+                        </table>
+
+                    </div>
+
+
+                    <body class="header-fixed sidebar-fixed sidebar-dark header-light" id="body">
+
+                    <div class="music-player">
+                        <!--<div style="background-image: url(http://i.imgur.com/yqB0erk.jpg);" class="album"></div>-->
+
+                        <div class="info">
+                            <div class="left">
+                                <a href="javascript:;" class="icon-shuffle"></a>
+                                <a href="javascript:;" class="icon-heart"></a>
+
+                            </div>
+                            <div class="center">
+                                <div class="jp-playlist">
+                                    <ul>
+                                        <li></li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                            <div class="right">
+                                <a href="javascript:;" class="icon-repeat"></a>
+                                <a href="javascript:;" class="icon-share"></a>
+                            </div>
+
+                            <div class="progress jp-seek-bar">
+                                <span class="jp-play-bar" style="width: 0%"></span>
+                            </div>
+                        </div>
+
+                        <div class="controls">
+                            <div class="current jp-current-time">00:00</div>
+                            <div class="play-controls">
+                                <a href="javascript:;" class="icon-previous jp-previous" title="previous"></a>
+                                <a href="javascript:;" class="icon-play jp-play" title="play"></a>
+                                <a href="javascript:;" class="icon-pause jp-pause" title="pause"></a>
+                                <a href="javascript:;" class="icon-next jp-next" title="next"></a>
+                            </div>
+                            <div class="volume-level jp-volume-bar">
+                                <span class="jp-volume-bar-value" style="width: 0%"></span>
+                                <a href="javascript:;" class="icon-volume-up jp-volume-max" title="max volume"></a>
+                                <a href="javascript:;" class="icon-volume-down jp-mute" title="mute"></a>
+                            </div>
+                        </div>
+
+                        <div id="jquery_jplayer" class="jp-jplayer"></div>
+
+                    </div>
+
+                    <div class="lrctext" style="margin-top: 100px;">
+                        <!-- 歌词展示区域 -->
+
+                    </div>
+                    </body>
+
+                </div>
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+</html>
+<script src="/static/music/js/jquery.min.js"></script>
+<script src='/static/music/js/jquery.jplayer.min.js'></script>
+<script src='/static/music/js/jplayer.playlist.min.js'></script>
+
+<script>
+
+
+    var json = {$json};
+    var fores = {$fors};
+    var syns = {$syns};
+    var Page = {$curpage};
+
+    $(document).ready(function(){
+
+
+        playlists(json)
+
+    });
+
+    function playlists(coordinates) {
+
+        var playlist = coordinates
+
+        //     [{
+        //     title:"Hidden",
+        //     artist:"Miaow",
+        //     mp3:"/uploads/music/123.mp3",
+        //     //oga:"http://www.jplayer.org/audio/ogg/Miaow-02-Hidden.ogg",
+        //     poster: "http://33.media.tumblr.com/0b35eb42176eedbf4a96e52efa760875/tumblr_mxp7a0v3fr1rqx86wo1_500.png"
+        // },{
+        //     title:"Cro Magnon Man",
+        //     artist:"The Stark Palace",
+        //     mp3:"http://jq22.qiniudn.com/i2.mp3",
+        //     //oga:"http://www.jplayer.org/audio/ogg/TSP-01-Cro_magnon_man.ogg",
+        //     poster: "http://33.media.tumblr.com/bf9dc125a47dcca91ce5b3575bc3ba92/tumblr_nbmb3j8nU51sq3g2zo1_500.png"
+        // },{
+        //     title:"Bubble",
+        //     m4a: "http://www.jplayer.org/audio/m4a/Miaow-07-Bubble.m4a",
+        //     oga: "http://www.jplayer.org/audio/ogg/Miaow-07-Bubble.ogg",
+        //     poster: "http://31.media.tumblr.com/810b1125a8b9e9f192d009ef58dceb07/tumblr_nbe8wsmKuz1rknpqyo1_500.jpg"
+        // }];
+
+        var cssSelector = {
+            jPlayer: "#jquery_jplayer",
+            cssSelectorAncestor: ".music-player"
+        };
+
+        var options = {
+            swfPath: "http://cdnjs.cloudflare.com/ajax/libs/jplayer/2.6.4/jquery.jplayer/Jplayer.swf",
+            supplied: "ogv, m4v, oga, mp3"
+        };
+
+        var myPlaylist = new jPlayerPlaylist(cssSelector, playlist, options);
+    }
+
+    $('.fores').on("click",function(){
+
+        var val = $(this).val();
+
+        if(fores != val){
+
+            $.ajax({
+                type: "POST",
+                url: "{:url('home/index/status')}",
+                data: {
+                    'type' : 1 ,
+                    'fores' : val ,
+
+                },  // 等号前后不要加空格
+                success: function(msg){  //请求成功后的回调函数
+
+                    if(msg == '200'){
+                        location.replace(location)
+                    }
+                }
+
+            });
+        }
+
+    });
+
+    $('.syns').on("click",function(){
+
+        var val = $(this).val();
+
+        if(syns != val){
+
+            $.ajax({
+                type: "POST",
+                url: "{:url('home/index/status')}",
+                data: {
+                    'type' : 2 ,
+                    'syns' : val ,
+
+                },  // 等号前后不要加空格
+                success: function(msg){  //请求成功后的回调函数
+
+                    if(msg == '200'){
+                        location.replace(location)
+                    }
+                }
+
+            });
+        }
+
+    });
+
+
+    //分页
+    turnPage(Page);
+    function turnPage(page) {
+
+        $.ajax({
+            type: 'POST',
+            data:{'page': page},
+            // url: '/admin.php/User/ajaxGetList',
+            url: '/home/index/page',
+            dataType: 'json',
+            success: function(data){
+                //console.log(data);
+                if (data.status== '200'){
+
+                    $("#tbody_list").html('');
+                    $(".count").html('');
+                    var list = "";
+                    for (var i=0;i<data.info.length;i++){
+                        list +='<tr style="color: #fff;">';
+                        list +='<td>'+data.info[i].title+'</td>';
+                        list +='<td><a onclick ="trOnClick(\''+data.info[i].artist+'\','+page+')" href="javascript:void(0);"  style="text-decoration:none;" >'+data.info[i].artist+'</a></td>';
+                        list +='</tr">';
+                    }
+                    $("#tbody_list").empty('');
+                    $("#table_list tbody").append(list);
+                    $("#tbody_list").html(list);
+                    totalItem = data.page.totalItem; // 返回的总记录数
+                    pageSize = data.page.pageSize; //返回的每一页记录数
+                    curPage = page; //返回的当前页码
+                    totalPage = data.page.totalPage; //返回的总页数
+                    //调取分页方法
+                    getPageBar();
+
+                }else{
+                    $(".count").html('');
+                    $(".page_div").html('');
+                    $("#table_list tbody").empty('');
+                    $("#list_show").show();
+                }
+            }
+        });
+    }
+
+    /*   curPage;    //当前页数
+       totalItem;  //总记录数
+       pageSize;   //每一页记录数
+       totalPage;  //总页数
+     */
+    //获取分页条（分页按钮栏的规则和样式根据自己的需要来设置）
+    function getPageBar() {
+        //防止数据错误时候出现当前页数大于总页数
+        if (curPage > totalPage) {
+            curPage = totalPage;
+        }
+        //防止数据错误时候出现当前页数小于第一页
+        if (curPage < 1) {
+            curPage = 1;
+        }
+        //定义分页按钮html代码
+        pageBar = "";
+
+        //如果不是第一页
+        if (curPage != 1) {
+            pageBar += "<span class='pageBtn'><a href='javascript:request_page(1)'>首页</a></span>";
+            pageBar += "<span class='pageBtn'><a href='javascript:request_page("+(curPage-1)+")'> << </a></span>";
+        }
+
+        //显示的页码按钮
+        if(totalPage > 6) {
+            //当前页数小于5时显示省略号
+            if(curPage < 5) {
+                for(var i = 1; i < 6; i++) {
+                    if(curPage == i) {
+                        pageBar += "<span class='pageBtn-selected'><a href='javascript:request_page(" + i + ")'>" + i + "</a></span>";
+                    } else {
+                        pageBar += "<span class='pageBtn'><a href='javascript:request_page(" + i + ")'>" + i + "</a></span>";
+                    }
+                }
+                pageBar += "<span class='pageBtn'><a href='javascript:void(0)' style='text-decoration: none;'>...</a></span>";
+                pageBar += "<span class='pageBtn'><a href='javascript:request_page(" + totalPage + ")'>" + totalPage + "</a></span>";
+            } else {
+                //判断页码在末尾的时候
+                if(curPage < totalPage - 3) {
+                    for(var i = curPage - 2; i < curPage + 3; i++) {
+                        if(curPage == i) {
+                            pageBar += "<span class='pageBtn-selected'><a href='javascript:request_page(" + i + ")'>" + i + "</a></span>";
+                        } else {
+                            pageBar += "<span class='pageBtn'><a href='javascript:request_page(" + i + ")'>" + i + "</a></span>";
+                        }
+                    }
+                    pageBar += "<span class='pageBtn'><a href='javascript:void(0)' style='text-decoration: none;'>...</a></span>";
+                    pageBar += "<span class='pageBtn'><a href='javascript:request_page(" + totalPage + ")'>" + totalPage + "</a></span>";
+                    //页码在中间部分时候
+                } else {
+                    pageBar += "<span class='pageBtn'><a href='javascript:request_page(1)'>1</a></span>";
+                    pageBar += "<span class='pageBtn'><a href='javascript:void(0)' style='text-decoration: none;'>...</a></span>";
+                    for(var i = totalPage - 4; i < totalPage + 1; i++) {
+                        if(curPage == i) {
+                            pageBar += "<span class='pageBtn-selected'><a href='javascript:request_page(" + i + ")'>" + i + "</a></span>";
+                        } else {
+                            pageBar += "<span class='pageBtn'><a href='javascript:request_page(" + i + ")'>" + i + "</a></span>";
+                        }
+                    }
+                }
+            }
+            //页面总数小于6的时候
+        } else {
+            for(var i = 1; i < totalPage + 1; i++) {
+                if(curPage == i) {
+                    pageBar += "<span class='pageBtn-selected'><a href='javascript:request_page(" + i + ")'>" + i + "</a></span>";
+                } else {
+                    pageBar += "<span class='pageBtn'><a href='javascript:request_page(" + i + ")'>" + i + "</a></span>";
+                }
+            }
+        }
+
+        //如果不是最后页,显示输出“下一页 ， 末页”
+
+        if (curPage != totalPage) {
+            pageBar += "<span class='pageBtn'><a href='javascript:request_page(" + (parseInt(curPage) + 1) + ")'> >> </a></span>";
+            pageBar += "<span class='pageBtn'><a href='javascript:request_page(" + totalPage + ")'>末页</a></span>";
+
+        }
+
+        pageBar += "&nbsp&nbsp&nbsp<span class='count'>共" + totalItem + "条</span>";
+
+        //匹配改变pageBar里面的内容
+        $("#pageBar").html(pageBar);
+    }
+
+
+    function request_page(page){
+        $.ajax({
+            type: 'POST',
+            data:{'page': page},
+            // url: '/admin.php/User/ajaxGetList',
+            url: '/home/index/page',
+            dataType: 'json',
+            success: function(data){
+                if (data.status== '200'){
+
+                    $("#tbody_list").html('');
+                    $(".count").html('');
+                    var list = "";
+                    for (var i=0;i<data.info.length;i++){
+                        list +='<tr style="color: #fff;">';
+                        list +='<td>'+data.info[i].title+'</td>';
+                        list +='<td><a onclick ="trOnClick(\''+data.info[i].artist+'\','+page+')" href="javascript:void(0);"  style="text-decoration:none;" >'+data.info[i].artist+'</a></td>';
+                        list +='</tr">';
+                    }
+                    $("#tbody_list").empty('');
+                    $("#table_list tbody").append(list);
+                    $("#tbody_list").html(list);
+                    totalItem = data.page.totalItem; // 返回的总记录数
+                    pageSize = data.page.pageSize; //返回的每一页记录数
+                    curPage = page; //返回的当前页码
+                    totalPage = data.page.totalPage; //返回的总页数
+                    //调取分页方法
+                    getPageBar();
+
+                }else{
+                    $(".count").html('');
+                    $(".page_div").html('');
+                    $("#table_list tbody").empty('');
+                    $("#list_show").show();
+                }
+            }
+        });
+    }
+
+
+    function trOnClick(value,page) {
+
+        window.location.replace("?page="+page+"&seach="+value)
+
+    }
+
+
+</script>
