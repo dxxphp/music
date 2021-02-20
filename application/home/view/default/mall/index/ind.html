@@ -240,6 +240,7 @@
 
 
 
+                <input type="hidden" value="{$title}" id="title">
 
             </div>
         </div>
@@ -357,10 +358,18 @@
     //分页
     turnPage(Page);
     function turnPage(page) {
+        var title = $('#title').val();
+
+        if(title.length == 0){
+            var where = {'page': page}
+
+        }else {
+            var where = {'page': page,'title':title}
+        }
 
         $.ajax({
             type: 'POST',
-            data:{'page': page},
+            data: where,
             // url: '/admin.php/User/ajaxGetList',
             url: '/home/index/page',
             dataType: 'json',
@@ -486,9 +495,16 @@
 
 
     function request_page(page){
+
+        if(title){
+            var where = {'page': page,'title':title}
+        }else {
+            var where = {'page': page}
+        }
+
         $.ajax({
             type: 'POST',
-            data:{'page': page},
+            data:where,
             // url: '/admin.php/User/ajaxGetList',
             url: '/home/index/page',
             dataType: 'json',

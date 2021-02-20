@@ -125,21 +125,23 @@ class Music extends Model
      * @author duxinxin
      * @date 2020/04/26
      */
-    public function  musicPage($curpage, $page = 20){
+    public function  musicPage($condition = '' , $curpage, $page = 20){
         //查询集合数量
+
         $totalItem = db('music')
 //            ->whereLike('classname',"%".$condition['classname']."%")
-//            ->where($condition['where'])
+            ->where($condition)
             ->count('id');
 
         //总页数
         $totalPage = ceil($totalItem/$page);
         $startItem = ($curpage-1) * $page;
+
         //查询集合并分页
         $news = db('music')
             ->field(['id','title','artist','mp3','poster'])
 //            ->whereLike('classname',"%".$condition['classname']."%")
-//            ->where($condition)
+            ->where($condition)
             ->order('id DESC')
             ->limit($startItem,$page)
             ->select();

@@ -247,16 +247,26 @@ class Index extends BaseMall
 
         $curpage = input('page') ? input('page') : self::page;//当前第x页
 
+        $title = input('title') ? input('title') : '';
+
+        if($title){
+            $condition = [
+                'title' => $title
+            ];
+        }else{
+            $condition = '';
+        }
 
         if($this->isMobile()){
 
-            $music =  model('music')->musicPage($curpage,10);
+            $music =  model('music')->musicPage($condition, $curpage,10);
 
         }else{
 
-            $music =  model('music')->musicPage($curpage);
+            $music =  model('music')->musicPage($condition , $curpage);
 
         }
+
 
         if (!empty($music)) {
             $arr = array('status' => 200, 'Code' => "1", 'info' => $music['data'],'page' => $music['page']);
