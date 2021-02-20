@@ -496,10 +496,13 @@
 
     function request_page(page){
 
-        if(title){
-            var where = {'page': page,'title':title}
-        }else {
+        var title = $('#title').val();
+
+        if(title.length == 0){
             var where = {'page': page}
+
+        }else {
+            var where = {'page': page,'title':title}
         }
 
         $.ajax({

@@ -190,6 +190,7 @@
         <!-- 歌词展示区域 -->
 
     </div>
+    <input type="hidden" value="{$title}" id="title">
 
 
     <div class="rightShop" style="width: 800px;">
@@ -332,9 +333,17 @@
         turnPage(Page);
         function turnPage(page) {
 
+            var title = $('#title').val();
+
+            if(title.length == 0){
+                var where = {'page': page}
+
+            }else {
+                var where = {'page': page,'title':title}
+            }
             $.ajax({
                 type: 'POST',
-                data:{'page': page},
+                data:where,
                 // url: '/admin.php/User/ajaxGetList',
                 url: '/home/index/page',
                 dataType: 'json',
@@ -460,9 +469,19 @@
 
 
         function request_page(page){
+
+            var title = $('#title').val();
+
+            if(title.length == 0){
+                var where = {'page': page}
+
+            }else {
+                var where = {'page': page,'title':title}
+            }
+
             $.ajax({
                 type: 'POST',
-                data:{'page': page},
+                data:where,
                 // url: '/admin.php/User/ajaxGetList',
                 url: '/home/index/page',
                 dataType: 'json',
