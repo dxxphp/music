@@ -199,7 +199,7 @@
             <table class="table card-table table-responsive table-responsive-large" style="width:100%">
                 <thead>
                 <tr style="color: #fff; font-size: 50px;">
-                    <th style="">歌手</th>
+                    <th style="width: 30px;">歌手</th>
                     <th style="">歌曲</th>
 
                 </tr>
@@ -356,7 +356,7 @@
                         var list = "";
                         for (var i=0;i<data.info.length;i++){
                             list +='<tr style="color: #fff;font-size: 40px;">';
-                            list +='<td>'+data.info[i].title+'</td>';
+                            list +='<td style="width: 250px;">'+data.info[i].title+'</td>';
                             list +='<td><a onclick ="trOnClick(\''+data.info[i].artist+'\','+page+')" href="javascript:void(0);"  style="text-decoration:none;" >'+data.info[i].artist+'</a></td>';
                             list +='</tr">';
                         }
@@ -492,7 +492,7 @@
                         var list = "";
                         for (var i=0;i<data.info.length;i++){
                             list +='<tr style="color: #fff;font-size: 40px;">';
-                            list +='<td>'+data.info[i].title+'</td>';
+                            list +='<td style="width: 250px;">'+data.info[i].title+'</td>';
                             list +='<td><a onclick ="trOnClick(\''+data.info[i].artist+'\','+page+')" href="javascript:void(0);"  style="text-decoration:none;" >'+data.info[i].artist+'</a></td>';
                             list +='</tr">';
                         }
