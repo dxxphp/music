@@ -194,7 +194,7 @@
 
 
     <div class="rightShop" style="width: 800px;">
-
+        <span style="color: #fff; font-size: 40px;"><a href="/index.php">全部歌曲</a></span>
         <div class="list">
             <table class="table card-table table-responsive table-responsive-large" style="width:100%">
                 <thead>
@@ -518,7 +518,10 @@
 
         function trOnClick(value,page) {
 
-            window.location.replace("?page="+page+"&seach="+value)
+            var title = $('#title').val();
+
+            window.location.replace("?title="+title+"&seach="+value+"&page="+page)
+
 
         }
     </script>

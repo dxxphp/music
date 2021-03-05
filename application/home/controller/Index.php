@@ -161,7 +161,6 @@ class Index extends BaseMall
         return $brand;
     }
 
-
     /**
      *  音乐列表
      *
@@ -170,6 +169,8 @@ class Index extends BaseMall
      */
 
     public function index(){
+
+
         $curpage = input('page') ? input('page') : self::page;//当前第x页
 
         $data = model('music')->set();
@@ -197,7 +198,12 @@ class Index extends BaseMall
         $seach = trim($this->request->get('seach'));
         $title = trim($this->request->get('title'));
 
-        if(!empty($title)){
+        if(!empty($title) && !empty($seach)){
+
+            $list = $this->music_show_yes($data,['artist' => $seach,'title' => $title]);
+
+
+        }else if(!empty($title)){
 
             $list = $this->music_show_no($data,['title' => $title]);
 
@@ -207,7 +213,6 @@ class Index extends BaseMall
             $list = $this->music_show_yes($data,['artist' => $seach]);
 
         }else{
-
             $list =  $this->music_show_no($data);
 
         }
@@ -218,6 +223,8 @@ class Index extends BaseMall
         $this->assign('syns', $data['syns']);
 
         $this->assign('title', $title);
+
+        $this->assign('seach', $seach);
 
         $this->assign('curpage', $curpage);
 
@@ -335,6 +342,7 @@ class Index extends BaseMall
     protected function music_show_no($data,$where = ''){
         $musicAll =  model('music')->musicAll($where);
 
+
         $list = [];
 
         switch ($data['fores']){
@@ -421,10 +429,6 @@ class Index extends BaseMall
 
         foreach($data as $key => $val){
 
-            $artist = trim(current(explode('.',$val['artist'])));
-
-            $val['artist'] = $artist;
-
             model('music')->music_Insert($val);
 
 
@@ -438,15 +442,21 @@ class Index extends BaseMall
         $dir .= substr($dir, -1) == '/' ? '' : '/';
         $dirInfo = array();
         foreach (glob($dir.'*') as $v) {
+
+
             $vs = explode("/",$v);
+
 
             $music = explode("-",$vs[2]);
 
-            $dirInfo[] = ['title' => $music[0],'artist' =>$music[1] ,'mp3' => 'http://'.$_SERVER['SERVER_NAME'] .'/'.$v ,'poster' =>'' ];
+            $artist = str_replace(strrchr($music[1], "."),"",$music[1]);
+
+            $dirInfo[] = ['title' => $music[0],'artist' =>$artist ,'mp3' => 'http://'.$_SERVER['SERVER_NAME'] .'/'.$v ,'poster' =>'' ];
             if(is_dir($v)){
                 $dirInfo = array_merge($dirInfo, $this->folder_list($v));
             }
         }
+
         return $dirInfo;
     }
 
