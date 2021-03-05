@@ -172,7 +172,6 @@ class Music extends Model
             ->field(['id','title','artist','mp3','poster'])
             ->where($condition)
             ->order('id DESC')
-            ->limit(200)
             ->select();
 
         return $arr;
