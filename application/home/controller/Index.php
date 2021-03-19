@@ -26,6 +26,26 @@ class Index extends BaseMall
     }
 
 
+
+
+    //查不到 在查这个
+    protected function getAddressgetByIPAPI($ip){
+
+        $url = "http://ip-api.com/json/$ip";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $output = curl_exec($ch);
+        if (curl_errno($ch)) {
+            echo 'CURL ERROR Code: ' . curl_errno($ch) . ', reason: ' . curl_error($ch);
+        }
+        curl_close($ch);
+        $info = json_decode($output, true);
+        return $info;
+    }
+
+
+
     protected  function get_ip_address($ip)
     {
 
@@ -57,6 +77,7 @@ class Index extends BaseMall
            $address = '';
            $point_x = '';
            $point_y = '';
+           $ip_info = '';
            if($ipAddress['status'] == 0){
 
                $addressArray = explode('|',$ipAddress['address'] );
@@ -68,6 +89,18 @@ class Index extends BaseMall
                $city_code = $ipAddress['content']['address_detail']['city_code'];
                $point_x = $ipAddress['content']['point']['x'];
                $point_y = $ipAddress['content']['point']['y'];
+               $ip_info = json_encode($ipAddress);
+
+           }else{
+
+               $array = $this->getAddressgetByIPAPI($ip);
+               $country = $this->transCode($array['countryCode']);
+
+               $address = $array['regionName'].'/'.$array['city'];
+               $city_code = $array['countryCode'];
+               $point_x = $array['lat'];
+               $point_y = $array['lon'];
+               $ip_info = json_encode($array);
 
            }
 
@@ -81,7 +114,7 @@ class Index extends BaseMall
                         'city_code' => $city_code,
                         'point_x' => $point_x,
                         'point_y' => $point_y,
-                        'ip_info' => json_encode($ipAddress),
+                        'ip_info' => $ip_info,
                         'ceateTime' => time(),
                     ];
                     model('music')->addIp($data);
@@ -97,7 +130,7 @@ class Index extends BaseMall
                     'city_code' => $city_code,
                     'point_x' => $point_x,
                     'point_y' => $point_y,
-                    'ip_info' => json_encode($ipAddress),
+                    'ip_info' => $ip_info,
                     'ceateTime' => time()
                 ];
                 model('music')->addIp($data);
@@ -456,28 +489,30 @@ class Index extends BaseMall
 //        ini_set('memory_limit','3072M');    // 临时设置最大内存占用为3G
         set_time_limit(0);   // 设置脚本最大执行时间 为0 永不过期
 
-        $res = Db::name('ip')->where('id','>',1690)->select();
+        $res = Db::name('ip')->where(['country' => ' '])->select();
+
+
+//        print_r
 
         foreach($res as $key => $val){
 
-            $ipAddress = $this->get_ip_address($val['ip']);
+            $ipAddress = $this->getAddressgetByIPAPI($val['ip']);
             $country = '';
             $city_code = '';
             $address = '';
             $point_x = '';
             $point_y = '';
+            $ip_info = '';
 
-            if($ipAddress['status'] == 0){
+            if($ipAddress['status'] == 'success'){
 
-                $addressArray = explode('|',$ipAddress['address'] );
+                $country = $this->transCode($ipAddress['countryCode']);
 
-                $country = $this->transCode($addressArray[0]);
-
-                //具体地址
-                $address = $ipAddress['content']['address'];
-                $city_code = $ipAddress['content']['address_detail']['city_code'];
-                $point_x = $ipAddress['content']['point']['x'];
-                $point_y = $ipAddress['content']['point']['y'];
+                $address = $ipAddress['regionName'].'/'.$ipAddress['city'];
+                $city_code = $ipAddress['countryCode'];
+                $point_x = $ipAddress['lat'];
+                $point_y = $ipAddress['lon'];
+                $ip_info = json_encode($ipAddress);
 
             }
 
@@ -487,9 +522,8 @@ class Index extends BaseMall
                 'city_code' => $city_code,
                 'point_x' => $point_x,
                 'point_y' => $point_y,
-                'ip_info' => json_encode($ipAddress),
+                'ip_info' => $ip_info,
             ];
-
 
            $res =  Db::name('ip')->where('id', $val['id'])->update($data);
            if($res){
