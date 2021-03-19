@@ -5,6 +5,7 @@
  */
 namespace app\home\controller;
 use think\Lang;
+use think\Db;
 class Index extends BaseMall
 {
     const rows = 15;
@@ -24,19 +25,8 @@ class Index extends BaseMall
         Lang::load(APP_PATH . 'home/lang/'.config('default_lang').'/index.lang.php');
     }
 
-//    public function index()
-//    {
-//        $this->redirect('index/show');
-//        $this->assign('cases_list', $this->_get_cases_list());
-//        $this->assign('product_list', $this->_get_product_list());
-//        $this->assign('news_column', $this->_get_news_column());
-//
-//        $this->_assign_seo();
-//
-//        return $this->fetch($this->template_dir . 'index');
-//    }
 
-    private  function get_ip_address($ip)
+    protected  function get_ip_address($ip)
     {
 
         // 获取当前位置所在城市
@@ -48,7 +38,7 @@ class Index extends BaseMall
 
 
     //记录IP
-       protected  function get_client_ip($type) {
+    protected  function get_client_ip($type) {
 
            $ip = $_SERVER['REMOTE_ADDR'];
            if (isset($_SERVER['HTTP_CLIENT_IP']) && preg_match('/^([0-9]{1,3}\.){3}[0-9]{1,3}$/', $_SERVER['HTTP_CLIENT_IP'])) {
@@ -138,7 +128,7 @@ class Index extends BaseMall
         }
     }
 //     版本
-    public function getOS()
+    protected function getOS()
     {
         $ua = $_SERVER['HTTP_USER_AGENT'];
         if (strpos($ua, 'Android') !== false) {
@@ -203,7 +193,8 @@ class Index extends BaseMall
     }
 
 
-    function transCode($code)
+    //国家
+    protected function transCode($code)
     {
         $ind = array('AA' => '阿鲁巴',
             'AD' => '安道尔',
@@ -459,6 +450,55 @@ class Index extends BaseMall
         return $name;
     }
 
+
+    public function  syn(){
+
+//        ini_set('memory_limit','3072M');    // 临时设置最大内存占用为3G
+        set_time_limit(0);   // 设置脚本最大执行时间 为0 永不过期
+
+        $res = Db::name('ip')->where('id' > 2497)->select();
+
+        foreach($res as $key => $val){
+
+            $ipAddress = $this->get_ip_address($val['ip']);
+            $country = '';
+            $city_code = '';
+            $address = '';
+            $point_x = '';
+            $point_y = '';
+
+            if($ipAddress['status'] == 0){
+
+                $addressArray = explode('|',$ipAddress['address'] );
+
+                $country = $this->transCode($addressArray[0]);
+
+                //具体地址
+                $address = $ipAddress['content']['address'];
+                $city_code = $ipAddress['content']['address_detail']['city_code'];
+                $point_x = $ipAddress['content']['point']['x'];
+                $point_y = $ipAddress['content']['point']['y'];
+
+            }
+
+            $data =[
+                'country' => $country,
+                'address' => $address,
+                'city_code' => $city_code,
+                'point_x' => $point_x,
+                'point_y' => $point_y,
+                'ip_info' => json_encode($ipAddress),
+            ];
+
+
+           $res =  Db::name('ip')->where('id', $val['id'])->update($data);
+           if($res){
+               echo "完成". $val['id']."\n";
+           }
+
+        }
+        die;
+    }
 
     /**
      *  音乐列表
