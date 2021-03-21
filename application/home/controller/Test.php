@@ -1,12 +1,14 @@
 <?php
 
 /*
- * 首页相关基本调用
+ * 脚本
  */
 namespace app\home\controller;
 use think\Lang;
+use think\Controller;
+
 use think\Db;
-class Test
+class Test extends Controller
 {
 
 
