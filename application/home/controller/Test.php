@@ -50,7 +50,7 @@ class Test extends Controller
                 $country = $this->transCode($array['countryCode']);
 
                 $address = $array['regionName'].'/'.$array['city'];
-                $city_code = $array['countryCode'];
+                $city_code = $array['countryCode'] ?$array['countryCode']: '' ;
                 $point_x = $array['lat'];
                 $point_y = $array['lon'];
                 $ip_info = json_encode($array);
@@ -59,12 +59,12 @@ class Test extends Controller
 
 
             $data =[
-                'country' => $country,
-                'address' => $address,
-                'city_code' => $city_code,
-                'point_x' => $point_x,
-                'point_y' => $point_y,
-                'ip_info' => $ip_info,
+                'country' => $country ?$country: '未知IP' ,
+                'address' => $address ? $address : '',
+                'city_code' => $city_code ? $city_code : '',
+                'point_x' => $point_x ? $point_x :'',
+                'point_y' => $point_y ? $point_y : '',
+                'ip_info' => $ip_info ? $ip_info :'',
             ];
 
             $res =  Db::name('ip')->where('id', $val['id'])->update($data);
