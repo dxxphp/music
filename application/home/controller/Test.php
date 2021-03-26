@@ -47,31 +47,44 @@ class Test extends Controller
             }else{
 
                 $array = $this->getAddressgetByIPAPI($val['ip']);
-                $country = $this->transCode($array['countryCode']);
+                if($array['status'] == 'success'){
 
-                $address = $array['regionName'].'/'.$array['city'];
-                $city_code = $array['countryCode'] ?$array['countryCode']: '' ;
-                $point_x = $array['lat'];
-                $point_y = $array['lon'];
-                $ip_info = json_encode($array);
+                    $country = $this->transCode($array['countryCode']);
+                    $address = $array['regionName'].'/'.$array['city'];
+                    $city_code = $array['countryCode'] ?$array['countryCode']: '' ;
+                    $point_x = $array['lat'];
+                    $point_y = $array['lon'];
+                    $ip_info = json_encode($array);
+
+                }else{
+
+                    $country = '未知IP';
+                    $address = '';
+                    $city_code = '' ;
+                    $point_x = '';
+                    $point_y = '';
+                    $ip_info = '';
+
+                }
 
             }
 
 
             $data =[
-                'country' => $country ?$country: '未知IP' ,
-                'address' => $address ? $address : '',
-                'city_code' => $city_code ? $city_code : '',
-                'point_x' => $point_x ? $point_x :'',
-                'point_y' => $point_y ? $point_y : '',
-                'ip_info' => $ip_info ? $ip_info :'',
+                'country' => $country ,
+                'address' => $address ,
+                'city_code' => $city_code ,
+                'point_x' => $point_x ,
+                'point_y' => $point_y ,
+                'ip_info' => $ip_info ,
             ];
 
             $res =  Db::name('ip')->where('id', $val['id'])->update($data);
             if($res){
-                echo "完成". $val['id']."\n";
+                echo "完成ID：". $val['id']."\n";
             }
         }
+
         echo "修改完成". count($res).'个'."\n";die;
 
     }
@@ -80,6 +93,7 @@ class Test extends Controller
     protected function getAddressgetByIPAPI($ip){
 
         $url = "http://ip-api.com/json/$ip";
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
