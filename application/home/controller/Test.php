@@ -20,6 +20,7 @@ class Test extends Controller
 
         $res = Db::name('ip')->where('country' ,' ')->limit(30)->select();
 
+        echo "获取了". count($res).'个'."\n";
 
         foreach($res as $key => $val){
             $country = '';
