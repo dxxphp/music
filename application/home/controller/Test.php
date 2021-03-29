@@ -18,7 +18,7 @@ class Test extends Controller
         ini_set('memory_limit','3072M');    // 临时设置最大内存占用为3G
         set_time_limit(0);   // 设置脚本最大执行时间 为0 永不过期
 
-        $res = Db::name('ip')->where('country' ,' ')->limit(30)->select();
+        $res = Db::name('ip')->where('country' ,'NULL')->limit(30)->select();
 
         echo "获取了". count($res).'个'."\n";
 
