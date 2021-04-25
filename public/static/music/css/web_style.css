@@ -112,7 +112,7 @@ body { background-size: cover; font-family: "Open Sans", sans-serif; background-
   display: inline-block;
   width: 35px;
   height: 40px;
-  margin: 0 30px;
+  margin: 0 100px;
 }
 .music-player .controls .volume-level {
   position: relative;
