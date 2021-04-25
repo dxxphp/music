@@ -28,7 +28,6 @@ class Index extends BaseMall
 
     //记录IP
     protected  function get_client_ip($type) {
-
            $ip = $_SERVER['REMOTE_ADDR'];
            if (isset($_SERVER['HTTP_CLIENT_IP']) && preg_match('/^([0-9]{1,3}\.){3}[0-9]{1,3}$/', $_SERVER['HTTP_CLIENT_IP'])) {
                $ip = $_SERVER['HTTP_CLIENT_IP'];
@@ -47,6 +46,7 @@ class Index extends BaseMall
                         'type' => $type,
                         'info' => '浏览器信息：'.$this->GetBrowser(),
                         'ceateTime' => time(),
+                        'url' => urldecode($_SERVER [ "REQUEST_URI" ]),
                     ];
                     model('music')->addIp($data);
 
@@ -56,7 +56,8 @@ class Index extends BaseMall
                     'ip' => $ip,
                     'type' => $type,
                     'info' => '设备：'.$this->mobile_type() . '版本'.$this->getOS() ,
-                    'ceateTime' => time()
+                    'ceateTime' => time(),
+                    'url' => urldecode($_SERVER [ "REQUEST_URI" ]),
                 ];
                 model('music')->addIp($data);
 
