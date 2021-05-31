@@ -257,11 +257,9 @@ class Index extends BaseMall
         }
 
         if($this->isMobile()){
-
             $music =  model('music')->musicPage($condition, $curpage,10);
 
         }else{
-
             $music =  model('music')->musicPage($condition , $curpage);
 
         }
@@ -415,6 +413,32 @@ class Index extends BaseMall
         $id = $this->request->post('id');
 
         $musicData =  model('music')->musicIdData($id);
+
+        if($this->isMobile()){
+            $type = 'web';
+        }else{
+            $type = 'pc';
+        }
+
+        $ip = $_SERVER['REMOTE_ADDR'];
+        if (isset($_SERVER['HTTP_CLIENT_IP']) && preg_match('/^([0-9]{1,3}\.){3}[0-9]{1,3}$/', $_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif(isset($_SERVER['HTTP_X_FORWARDED_FOR']) AND preg_match_all('#\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}#s', $_SERVER['HTTP_X_FORWARDED_FOR'], $matches)) {
+            foreach ($matches[0] AS $xip) {
+                if (!preg_match('#^(10|172\.16|192\.168)\.#', $xip)) {
+                    $ip = $xip;
+                    break;
+                }
+            }
+        }
+        $data =[
+            'ip' => $ip,
+            'type' => $type,
+            'info' => '设备：'.$this->mobile_type() . '版本'.$this->getOS() ,
+            'ceateTime' => time(),
+            'url' => '点击播放歌曲：'.$musicData[0]['title'].$musicData[0]['artist'],
+        ];
+        model('music')->addIp($data);
 
         return json($musicData);
     }
