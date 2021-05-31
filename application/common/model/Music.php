@@ -125,7 +125,7 @@ class Music extends Model
      * @author duxinxin
      * @date 2020/04/26
      */
-    public function  musicPage($condition = '' , $curpage, $page = 20){
+    public function  musicPage($condition = '' , $curpage, $page = 18){
         //查询集合数量
 
         $totalItem = db('music')
