@@ -176,6 +176,26 @@ class Music extends Model
 
         return $arr;
     }
+
+    /**
+     * 查询id之后的所有
+     *
+     * @access classPage
+     * @author duxinxin
+     * @date 2020/04/26
+     */
+    public function  musicIdData($id){
+
+        //查询集合
+        $arr =  db('music')
+            ->field(['id','title','artist','mp3','poster'])
+            ->where('id','<=',$id)
+            ->order('id DESC')
+            ->select();
+
+        return $arr;
+    }
+
 }
 
 ?>

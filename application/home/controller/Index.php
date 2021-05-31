@@ -410,6 +410,15 @@ class Index extends BaseMall
 
     }
 
+    //点击无感切换歌曲
+    public function cut(){
+        $id = $this->request->post('id');
+
+        $musicData =  model('music')->musicIdData($id);
+
+        return json($musicData);
+    }
+
 
     //从文件夹中同步音乐到 数据库
     protected function syns(){

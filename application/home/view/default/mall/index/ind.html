@@ -124,7 +124,7 @@
                     <label><input type="radio" class="fores" name="sex" value="1"  {if $fors =='1'} checked="checked" {/if} >列表播放</label>
                     <label><input type="radio" class="fores" name="sex" value="2" {if $fors =='2'} checked="checked" {/if}>单曲播放</label>
                     <label><input type="radio" class="fores" name="sex" value="3" {if $fors =='3'} checked="checked" {/if}>随机播放</label>
-                    
+
 
 
                 </div> <br><br><br>
@@ -166,7 +166,6 @@
                             <tr style="color: #fff;">
                                 {if $k%10 === 0} <br><br>&nbsp {/if}
                                 &nbsp<a style="color: #fff;text-decoration:none;" href="?title={$value.title}">
-
                                 {if $title == $value.title} <span style="color: #2c3b41">{$value.title}</span> {else/} {$value.title} {/if}
 
                             </a>&nbsp&nbsp
@@ -299,6 +298,23 @@
         var myPlaylist = new jPlayerPlaylist(cssSelector, playlist, options);
     }
 
+    //切换歌曲
+    function trOnClick(id) {
+        $('#jquery_jplayer').jPlayer("destroy");
+
+        $.ajax({
+            type: "POST",
+            url: "{:url('home/index/cut')}",
+            data: {
+                'id' : id ,
+            },  // 等号前后不要加空格
+            success: function(data){
+                playlists(data)
+            }
+
+        });
+
+    }
     $('.fores').on("click",function(){
 
         var val = $(this).val();
@@ -380,7 +396,7 @@
                     for (var i=0;i<data.info.length;i++){
                         list +='<tr style="color: #fff;">';
                         list +='<td>'+data.info[i].title+'</td>';
-                        list +='<td><a onclick ="trOnClick(\''+data.info[i].artist+'\','+page+')" href="javascript:void(0);"  style="text-decoration:none;" >'+data.info[i].artist+'</a></td>';
+                        list +='<td><a onclick ="trOnClick(\''+data.info[i].id+'\')"  href="javascript:void(0);"  style="text-decoration:none;" >'+data.info[i].artist+'</a></td>';
                         list +='</tr">';
                     }
                     $("#tbody_list").empty('');
@@ -516,7 +532,7 @@
                     for (var i=0;i<data.info.length;i++){
                         list +='<tr style="color: #fff;">';
                         list +='<td>'+data.info[i].title+'</td>';
-                        list +='<td><a onclick ="trOnClick(\''+data.info[i].artist+'\','+page+')" href="javascript:void(0);"  style="text-decoration:none;" >'+data.info[i].artist+'</a></td>';
+                        list +='<td><a onclick ="trOnClick(\''+data.info[i].id+'\')" href="javascript:void(0);"  style="text-decoration:none;" >'+data.info[i].artist+'</a></td>';
                         list +='</tr">';
                     }
                     $("#tbody_list").empty('');
@@ -540,13 +556,7 @@
     }
 
 
-    function trOnClick(value,page) {
 
-        var title = $('#title').val();
-
-        window.location.replace("?title="+title+"&seach="+value+"&page="+page)
-
-    }
 
 
 </script>
