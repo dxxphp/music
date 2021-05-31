@@ -436,7 +436,7 @@ class Index extends BaseMall
             'type' => $type,
             'info' => '设备：'.$this->mobile_type() . '版本'.$this->getOS() ,
             'ceateTime' => time(),
-            'url' => '点击播放歌曲：'.$musicData[0]['title'].$musicData[0]['artist'],
+            'url' => '点击歌曲：'.$musicData[0]['title'].':'.$musicData[0]['artist'],
         ];
         model('music')->addIp($data);
 
