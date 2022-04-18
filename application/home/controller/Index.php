@@ -209,10 +209,19 @@ class Index extends BaseMall
 
         }
 
+        //今日推荐歌手
+        $singer = model('music')->getSinger();
+        //今日推荐歌曲
+        $song = model('music')->getSong();
 
 
         $this->assign('fors', $data['fores']);
+
         $this->assign('syns', $data['syns']);
+
+        $this->assign('singer', $singer);
+
+        $this->assign('song', $song);
 
         $this->assign('title', $title);
 
@@ -554,6 +563,74 @@ class Index extends BaseMall
             }
         }
         return false;
+    }
+
+    //处理推荐歌手
+    public function recommendSinger(){
+        $this->recommendSong();
+
+        //处理歌手
+        $data = model('music')->ipSinger();
+        $arr = [];
+        foreach ($data as $key => $val){
+            $arr[] = [
+                'singer_name' => substr($val['url'],strrpos($val['url'],"=")+1),
+                'num' => $val['num'],
+                'created_at' => date('Y-m-d H:i:s', time()),
+                'updated_at' => date('Y-m-d H:i:s', time()),
+            ];
+        }
+
+        $find = model('music')->getSinger();
+        if($find){
+            model('music')->deleteSinger();
+        }
+        $arr = array_slice($arr, 0, 10);
+        foreach ($arr as $k => $v){
+            $add = model('music')->singerInsert($v);
+        }
+
+        if($add){
+            //处理歌曲
+            $this->recommendSong();
+            echo "OK";
+        }else{
+            echo "error";
+        }
+    }
+
+    //处理推荐歌曲
+    private function recommendSong(){
+        //处理歌曲
+        $data = model('music')->ipSong();
+        $arr = [];
+
+        foreach ($data as $key => $val){
+
+            $name = substr($val['url'],strrpos($val['url'],":")+1);
+            $findSong = model('music')->musicFind(['artist' => $name]);
+
+            $songOne = str_replace("点击歌曲：", "", $val['url']);
+            $arr[] = [
+                'singer_name' => str_replace(":", "--", $songOne),
+                'singer_id' => $findSong['id'],
+                'num' => $val['num'],
+                'created_at' => date('Y-m-d H:i:s', time()),
+                'updated_at' => date('Y-m-d H:i:s', time()),
+            ];
+        }
+
+        $find = model('music')->getSong();
+        if($find){
+            model('music')->deleteSong();
+        }
+
+        $arr = array_slice($arr, 0, 10);
+        foreach ($arr as $k => $v){
+             model('music')->songInsert($v);
+        }
+        return true;
+
     }
 
 }

@@ -3,6 +3,7 @@
 namespace app\common\model;
 
 use think\Model;
+use \think\db;
 
 class Music extends Model
 {
@@ -195,6 +196,105 @@ class Music extends Model
 
         return $arr;
     }
+
+
+    /**
+     * 通过ip记录 查询最热歌手
+     *
+     * @access classPage
+     * @author duxinxin
+     * @date 2020/04/26
+     */
+    public function  ipSinger(){
+        //查询集合
+        return db::query("SELECT url, count(url) as num FROM ds_ip where url like '%title%' GROUP BY url ORDER BY num DESC");
+
+    }
+
+    /**
+     * 推荐的歌手名称添加
+     *
+     * @access Singer_Insert
+     * @author duxinxin
+     * @date 2020/04/26
+     */
+    public function singerInsert($data){
+        return  db('recommend_singer')->insert($data,true);
+    }
+
+    /**
+     * 推荐的歌手获取
+     *
+     * @access Singer_Insert
+     * @author duxinxin
+     * @date 2020/04/26
+     */
+    public function getSinger(){
+        return  db('recommend_singer')->find();
+    }
+
+    /**
+     * 删除推荐歌手
+     *
+     * @access Singer_Insert
+     * @author duxinxin
+     * @date 2020/04/26
+     */
+    public function deleteSinger(){
+        $sql = "truncate table ds_recommend_singer";
+        return db::query($sql);
+    }
+
+
+
+
+    /**
+     * 推荐的歌曲获取
+     *
+     * @access Singer_Insert
+     * @author duxinxin
+     * @date 2020/04/26
+     */
+    public function getSong(){
+        return  db('recommend_song')->find();
+    }
+
+    /**
+     * 删除推荐歌曲
+     *
+     * @access Singer_Insert
+     * @author duxinxin
+     * @date 2020/04/26
+     */
+    public function deleteSong(){
+        $sql = "truncate table ds_recommend_song";
+        return db::query($sql);
+    }
+
+    /**
+     * 通过ip记录 查询最热歌曲
+     *
+     * @access classPage
+     * @author duxinxin
+     * @date 2020/04/26
+     */
+    public function  ipSong(){
+        //查询集合
+        return db::query("SELECT url, count(url) as num FROM ds_ip where url like '%点击歌曲%' GROUP BY url ORDER BY num DESC");
+    }
+
+    /**
+     * 推荐的歌曲名称添加
+     *
+     * @access Singer_Insert
+     * @author duxinxin
+     * @date 2020/04/26
+     */
+    public function songInsert($data){
+        return  db('recommend_song')->insert($data,true);
+    }
+
+
 
 }
 

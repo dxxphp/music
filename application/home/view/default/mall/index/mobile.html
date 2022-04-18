@@ -112,13 +112,12 @@
     <body class="header-fixed sidebar-fixed sidebar-dark header-light" id="body">
 
 
-
     <div style="font-size: 35px;color: #fff" >
-        <br/> <br/>
-        <span>&nbsp&nbsp热门歌手</span>
-
+        <br/>
+        <span>&nbsp&nbsp热门歌手</span><br/><br/>
+        <span>&nbsp&nbsp今日推荐歌手：<a style="color: #982e4b;text-decoration:none;" href="?title={$singer.singer_name}">{$singer.singer_name}</a></span><br/><br/>
+        <span>&nbsp&nbsp今日推荐歌曲：<a onclick ="trOnClick({$song.singer_id})"  href="javascript:void(0);"  style="text-decoration:none;" >{$song.singer_name}</a></span>
         <table>
-
             <tbody class="body">
             {foreach name="musicShou" item="value" key="k"}
 
