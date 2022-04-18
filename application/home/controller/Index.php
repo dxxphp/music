@@ -169,7 +169,10 @@ class Index extends BaseMall
 
         if($data['syns'] == self::syns_yes){
 
+            //处理同步
             $this->syns();
+            //处理推荐
+            $this->recommendSinger();
 
         }
 
