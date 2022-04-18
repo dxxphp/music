@@ -567,8 +567,6 @@ class Index extends BaseMall
 
     //处理推荐歌手
     public function recommendSinger(){
-        $this->recommendSong();
-
         //处理歌手
         $data = model('music')->ipSinger();
         $arr = [];
