@@ -156,8 +156,20 @@
                 <div  id="bodys" >
                     <br>
                     <div class="content" data-v-5ecb8b3b="" style="padding-left: 800px;padding-right: 100px;">
-                        <span>&nbsp&nbsp&nbsp今日推荐歌手：<a style="color: #982e4b;text-decoration:none;" href="?title={$singer.singer_name}">{$singer.singer_name}</a></span>
-                        <span>&nbsp&nbsp&nbsp今日推荐歌曲：<a onclick ="trOnClick({$song.singer_id})"  href="javascript:void(0);"  style="text-decoration:none;" >{$song.singer_name}</a></span><br> <br/>
+                        <span>&nbsp&nbsp&nbsp今日推荐歌手：
+                            {if !empty($singer.singer_name)}
+                                 <a style="color: #982e4b;text-decoration:none;" href="?title={$singer.singer_name}">{$singer.singer_name}</a>
+                            {else/}
+                                暂无
+                            {/if}
+                        </span>
+                        <span>&nbsp&nbsp&nbsp今日推荐歌曲：
+                            {if !empty($song.singer_name)}
+                             <a onclick ="trOnClick({$song.singer_id})"  href="javascript:void(0);"  style="text-decoration:none;" >{$song.singer_name}</a>
+                            {else/}
+                                暂无
+                            {/if}
+                           </span><br><br/>
                         <span>&nbsp&nbsp&nbsp热门歌手</span>
 
                         <table>

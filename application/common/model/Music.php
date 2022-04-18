@@ -207,7 +207,7 @@ class Music extends Model
      */
     public function  ipSinger(){
         //查询集合
-        return db::query("SELECT url, count(url) as num FROM ds_ip where url like '%title%' GROUP BY url ORDER BY num DESC");
+        return db::query("SELECT url, count(url) as num FROM ds_ip where url like '%title%' GROUP BY url ORDER BY num DESC limit 1");
 
     }
 
@@ -280,7 +280,7 @@ class Music extends Model
      */
     public function  ipSong(){
         //查询集合
-        return db::query("SELECT url, count(url) as num FROM ds_ip where url like '%点击歌曲%' GROUP BY url ORDER BY num DESC");
+        return db::query("SELECT url, count(url) as num FROM ds_ip where url like '%点击歌曲%' GROUP BY url ORDER BY num DESC limit 1");
     }
 
     /**

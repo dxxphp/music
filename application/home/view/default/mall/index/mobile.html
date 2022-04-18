@@ -115,8 +115,20 @@
     <div style="font-size: 35px;color: #fff" >
         <br/>
         <span>&nbsp&nbsp热门歌手</span><br/><br/>
-        <span>&nbsp&nbsp今日推荐歌手：<a style="color: #982e4b;text-decoration:none;" href="?title={$singer.singer_name}">{$singer.singer_name}</a></span><br/><br/>
-        <span>&nbsp&nbsp今日推荐歌曲：<a onclick ="trOnClick({$song.singer_id})"  href="javascript:void(0);"  style="text-decoration:none;" >{$song.singer_name}</a></span>
+        <span>&nbsp&nbsp今日推荐歌手：
+            {if !empty($singer.singer_name)}
+                <a style="color: #982e4b;text-decoration:none;" href="?title={$singer.singer_name}">{$singer.singer_name}</a>
+            {else/}
+                暂无
+            {/if}
+            </span><br/><br/>
+        <span>&nbsp&nbsp今日推荐歌曲：
+             {if !empty($song.singer_name)}
+                 <a onclick ="trOnClick({$song.singer_id})"  href="javascript:void(0);"  style="text-decoration:none;" >{$song.singer_name}</a>
+            {else/}
+                暂无
+            {/if}
+           </span>
         <table>
             <tbody class="body">
             {foreach name="musicShou" item="value" key="k"}
